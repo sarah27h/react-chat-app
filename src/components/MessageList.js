@@ -22,17 +22,8 @@ class MessageList extends Component {
     const messages = MESSAGES_DUMMY_DATA.map((message, index) => {
       return <Message senderId={message.senderId} text={message.text} key={index} />;
     });
-    return (
-      <div className="message-list">
-        {messages}
-        <div>
-          {this.props.chatkit.isLoading
-            ? 'Connecting to Chatkit...'
-            : `Hello ${this.props.chatkit.currentUser.name}!`}
-        </div>
-      </div>
-    );
+    return <div className="message-list">{messages}</div>;
   }
 }
 
-export default withChatkit(MessageList);
+export default MessageList;

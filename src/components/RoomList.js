@@ -6,9 +6,6 @@ const ROOMS_DUMMY_DATA = [
     roomName: 'JS-newbies'
   },
   {
-    roomName: 'JS-help'
-  },
-  {
     roomName: 'random'
   }
 ];
