@@ -7,6 +7,9 @@ import { tokenUrl, chatkitInstanceLocator } from '../config/config';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 
 class Main extends Component {
+  state = {
+    messages: []
+  };
   // hook our app with chatkit API
   componentDidMount() {
     const chatManager = new ChatManager({
@@ -15,7 +18,7 @@ class Main extends Component {
       tokenProvider: new TokenProvider({ url: tokenUrl })
     });
 
-    // connect with chatkit
+    // connect with chatkit, fetch data from it
     chatManager
       .connect()
       .then(currentUser => {
@@ -24,7 +27,8 @@ class Main extends Component {
           roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
           hooks: {
             onMessage: message => {
-              console.log('received message', message);
+              console.log('received message', message, message.parts[0].payload.content);
+              this.setState({ messages: [...this.state.messages, message] });
             }
           },
           messageLimit: 10
@@ -37,7 +41,7 @@ class Main extends Component {
   render() {
     return (
       <div className="app">
-        <MessageList />
+        <MessageList messages={this.state.messages} />
         <RoomList />
         <NewRoomForm />
         <SendMessageForm />

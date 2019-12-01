@@ -19,10 +19,11 @@ const MESSAGES_DUMMY_DATA = [
 
 class MessageList extends Component {
   render() {
-    const messages = MESSAGES_DUMMY_DATA.map((message, index) => {
-      return <Message senderId={message.senderId} text={message.text} key={index} />;
+    const { messages } = this.props;
+    const roomMessages = messages.map((message, index) => {
+      return <Message senderId={message.senderId} text={message} key={index} />;
     });
-    return <div className="message-list">{messages}</div>;
+    return <div className="message-list">{roomMessages}</div>;
   }
 }
 
