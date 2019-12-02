@@ -8,7 +8,9 @@ import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 
 class Main extends Component {
   state = {
-    messages: []
+    messages: [],
+    joinableRooms: [],
+    joinedRooms: []
   };
 
   sendMessageToChatkit = message => {
@@ -38,8 +40,19 @@ class Main extends Component {
       .connect()
       .then(currentUser => {
         this.currentUser = currentUser;
+        this.currentUser
+          .getJoinableRooms()
+          .then(rooms => {
+            this.setState({
+              joinableRooms: rooms,
+              joinedRooms: currentUser.rooms
+            });
+          })
+          .catch(err => {
+            console.log(`Error getting joinable rooms: ${err}`);
+          });
         console.log('Successful connection', currentUser);
-        currentUser.subscribeToRoomMultipart({
+        this.currentUser.subscribeToRoomMultipart({
           roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
           hooks: {
             onMessage: message => {
@@ -55,10 +68,11 @@ class Main extends Component {
       });
   }
   render() {
+    console.log(this.state);
     return (
       <div className="app">
         <MessageList messages={this.state.messages} />
-        <RoomList />
+        <RoomList joinedRooms={this.state.joinedRooms} joinableRooms={this.state.joinableRooms} />
         <NewRoomForm />
         <SendMessageForm sendMessage={this.sendMessageToChatkit} />
       </div>

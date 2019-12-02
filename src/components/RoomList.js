@@ -12,12 +12,25 @@ const ROOMS_DUMMY_DATA = [
 
 class RoomList extends Component {
   render() {
-    const rooms = ROOMS_DUMMY_DATA.map((room, index) => {
-      return <Room roomName={room.roomName} key={index} />;
+    const { joinedRooms, joinableRooms } = this.props;
+
+    const joinedUserRooms = joinedRooms.map((room, index) => {
+      return <Room roomName={room.name} key={index} />;
+    });
+
+    const joinableUserRooms = joinableRooms.map((room, index) => {
+      return <Room roomName={room.name} key={index} />;
     });
     return (
       <div className="rooms-list">
-        <ul>{rooms}</ul>
+        <ul>
+          <h3>Your Rooms</h3>
+          {joinedUserRooms}
+        </ul>
+        <ul>
+          <h3>Rooms to join</h3>
+          {joinableUserRooms}
+        </ul>
       </div>
     );
   }
