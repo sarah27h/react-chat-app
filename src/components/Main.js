@@ -10,6 +10,21 @@ class Main extends Component {
   state = {
     messages: []
   };
+
+  sendMessageToChatkit = message => {
+    this.currentUser
+      .sendSimpleMessage({
+        roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
+        text: message
+      })
+      .then(messageId => {
+        console.log(`Message is added`);
+      })
+      .catch(err => {
+        console.log(`Error: ${err}`);
+      });
+  };
+
   // hook our app with chatkit API
   componentDidMount() {
     const chatManager = new ChatManager({
@@ -22,6 +37,7 @@ class Main extends Component {
     chatManager
       .connect()
       .then(currentUser => {
+        this.currentUser = currentUser;
         console.log('Successful connection', currentUser);
         currentUser.subscribeToRoomMultipart({
           roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
@@ -44,7 +60,7 @@ class Main extends Component {
         <MessageList messages={this.state.messages} />
         <RoomList />
         <NewRoomForm />
-        <SendMessageForm />
+        <SendMessageForm sendMessage={this.sendMessageToChatkit} />
       </div>
     );
   }

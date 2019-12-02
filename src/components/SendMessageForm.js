@@ -10,8 +10,11 @@ class SendMessageForm extends Component {
   };
 
   handleSubmit = e => {
+    const { sendMessage } = this.props;
     e.preventDefault();
-    console.log(this.state.message);
+    // send message up as an action to <Main />
+    sendMessage(this.state.message);
+    this.setState({ message: '' }); // to improve UX
   };
 
   render() {
