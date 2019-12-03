@@ -19,7 +19,7 @@ class RoomList extends Component {
     });
 
     const joinableUserRooms = joinableRooms.map((room, index) => {
-      return <Room roomName={room.name} key={index} />;
+      return <Room roomName={room.name} key={room.id} />;
     });
     return (
       <div className="rooms-list">

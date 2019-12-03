@@ -21,7 +21,7 @@ class MessageList extends Component {
   render() {
     const { messages } = this.props;
     const roomMessages = messages.map((message, index) => {
-      return <Message senderId={message.senderId} text={message} key={index} />;
+      return <Message senderId={message.senderId} text={message} key={message.id} />;
     });
     return <div className="message-list">{roomMessages}</div>;
   }
