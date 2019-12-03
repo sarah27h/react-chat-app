@@ -27,6 +27,33 @@ class Main extends Component {
       });
   };
 
+  subscribeToRoom = () => {
+    this.currentUser.subscribeToRoomMultipart({
+      roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
+      hooks: {
+        onMessage: message => {
+          console.log('received message', message, message.parts[0].payload.content);
+          this.setState({ messages: [...this.state.messages, message] });
+        }
+      },
+      messageLimit: 10
+    });
+  };
+
+  getRooms = () => {
+    this.currentUser
+      .getJoinableRooms()
+      .then(rooms => {
+        this.setState({
+          joinableRooms: rooms,
+          joinedRooms: this.currentUser.rooms
+        });
+      })
+      .catch(err => {
+        console.log(`Error getting joinable rooms: ${err}`);
+      });
+  };
+
   // hook our app with chatkit API
   componentDidMount() {
     const chatManager = new ChatManager({
@@ -40,28 +67,9 @@ class Main extends Component {
       .connect()
       .then(currentUser => {
         this.currentUser = currentUser;
-        this.currentUser
-          .getJoinableRooms()
-          .then(rooms => {
-            this.setState({
-              joinableRooms: rooms,
-              joinedRooms: currentUser.rooms
-            });
-          })
-          .catch(err => {
-            console.log(`Error getting joinable rooms: ${err}`);
-          });
+        this.getRooms();
         console.log('Successful connection', currentUser);
-        this.currentUser.subscribeToRoomMultipart({
-          roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
-          hooks: {
-            onMessage: message => {
-              console.log('received message', message, message.parts[0].payload.content);
-              this.setState({ messages: [...this.state.messages, message] });
-            }
-          },
-          messageLimit: 10
-        });
+        this.subscribeToRoom();
       })
       .catch(err => {
         console.log('Error on connection', err);
