@@ -10,13 +10,14 @@ class Main extends Component {
   state = {
     messages: [],
     joinableRooms: [],
-    joinedRooms: []
+    joinedRooms: [],
+    roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912'
   };
 
   sendMessageToChatkit = message => {
     this.currentUser
       .sendSimpleMessage({
-        roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
+        roomId: this.state.roomId,
         text: message
       })
       .then(messageId => {
@@ -27,17 +28,24 @@ class Main extends Component {
       });
   };
 
-  subscribeToRoom = () => {
-    this.currentUser.subscribeToRoomMultipart({
-      roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912',
-      hooks: {
-        onMessage: message => {
-          console.log('received message', message, message.parts[0].payload.content);
-          this.setState({ messages: [...this.state.messages, message] });
-        }
-      },
-      messageLimit: 10
-    });
+  subscribeToRoom = roomId => {
+    console.log(roomId);
+    this.setState({ roomId, messages: [] }); // UX clean screen every time user click an new room
+    this.currentUser
+      .subscribeToRoomMultipart({
+        roomId: roomId,
+        hooks: {
+          onMessage: message => {
+            console.log('received message', message, message.parts[0].payload.content);
+            this.setState({ messages: [...this.state.messages, message] });
+          }
+        },
+        messageLimit: 10
+      })
+      .then(room => {
+        this.getRooms();
+      })
+      .catch(err => console.log('error on subscribing to room: ', err));
   };
 
   getRooms = () => {
@@ -51,6 +59,22 @@ class Main extends Component {
       })
       .catch(err => {
         console.log(`Error getting joinable rooms: ${err}`);
+      });
+  };
+
+  fetchRoomMessages = roomId => {
+    this.currentUser
+      .fetchMultipartMessages({
+        roomId,
+        // initialId: 42,
+        direction: 'older',
+        limit: 10
+      })
+      .then(messages => {
+        this.setState({ messages });
+      })
+      .catch(err => {
+        console.log(`Error fetching messages: ${err}`);
       });
   };
 
@@ -68,8 +92,14 @@ class Main extends Component {
       .then(currentUser => {
         this.currentUser = currentUser;
         this.getRooms();
-        console.log('Successful connection', currentUser);
-        this.subscribeToRoom();
+        // handle user is a member of the default room case before making the request to fetch room messages
+        for (const room of this.currentUser.rooms) {
+          if (room.id === this.state.roomId) {
+            this.fetchRoomMessages(this.state.roomId);
+          }
+        }
+
+        console.log('Successful connection', currentUser.rooms);
       })
       .catch(err => {
         console.log('Error on connection', err);
@@ -80,7 +110,11 @@ class Main extends Component {
     return (
       <div className="app">
         <MessageList messages={this.state.messages} />
-        <RoomList joinedRooms={this.state.joinedRooms} joinableRooms={this.state.joinableRooms} />
+        <RoomList
+          joinedRooms={this.state.joinedRooms}
+          joinableRooms={this.state.joinableRooms}
+          subscribeToRoom={this.subscribeToRoom}
+        />
         <NewRoomForm />
         <SendMessageForm sendMessage={this.sendMessageToChatkit} />
       </div>
