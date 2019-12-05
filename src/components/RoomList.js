@@ -12,29 +12,41 @@ const ROOMS_DUMMY_DATA = [
 
 class RoomList extends Component {
   render() {
-    const { joinedRooms, joinableRooms, subscribeToRoom } = this.props;
+    const { joinedRooms, joinableRooms, subscribeToRoom, currentRoomId } = this.props;
 
-    const joinedUserRooms = joinedRooms.map(room => {
-      return (
-        <Room
-          roomName={room.name}
-          roomId={room.id}
-          key={room.id}
-          subscribeToRoom={subscribeToRoom}
-        />
-      );
-    });
+    const joinedUserRooms = joinedRooms
+      .sort((a, b) => {
+        return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1;
+      })
+      .map(room => {
+        return (
+          <Room
+            roomName={room.name}
+            roomId={room.id}
+            key={room.id}
+            subscribeToRoom={subscribeToRoom}
+            currentRoomId={currentRoomId}
+          />
+        );
+      });
 
-    const joinableUserRooms = joinableRooms.map(room => {
-      return (
-        <Room
-          roomName={room.name}
-          roomId={room.id}
-          key={room.id}
-          subscribeToRoom={subscribeToRoom}
-        />
-      );
-    });
+    console.log(joinedUserRooms);
+    const joinableUserRooms = joinableRooms
+      .sort((a, b) => {
+        return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1;
+      })
+      .map(room => {
+        return (
+          <Room
+            roomName={room.name}
+            roomId={room.id}
+            key={room.id}
+            subscribeToRoom={subscribeToRoom}
+            currentRoomId={currentRoomId}
+          />
+        );
+      });
+
     return (
       <div className="rooms-list">
         <h3>Your Rooms</h3>

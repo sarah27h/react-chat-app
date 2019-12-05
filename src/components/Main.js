@@ -11,13 +11,13 @@ class Main extends Component {
     messages: [],
     joinableRooms: [],
     joinedRooms: [],
-    roomId: 'b612162c-ade2-4c7c-9e23-41a249c88912'
+    currentRoomId: 'b612162c-ade2-4c7c-9e23-41a249c88912'
   };
 
   sendMessageToChatkit = message => {
     this.currentUser
       .sendSimpleMessage({
-        roomId: this.state.roomId,
+        roomId: this.state.currentRoomId,
         text: message
       })
       .then(messageId => {
@@ -30,7 +30,7 @@ class Main extends Component {
 
   subscribeToRoom = roomId => {
     console.log(roomId);
-    this.setState({ roomId, messages: [] }); // UX clean screen every time user click an new room
+    this.setState({ currentRoomId: roomId, messages: [] }); // UX clean screen every time user click an new room
     this.currentUser
       .subscribeToRoomMultipart({
         roomId: roomId,
@@ -82,7 +82,7 @@ class Main extends Component {
   componentDidMount() {
     const chatManager = new ChatManager({
       instanceLocator: chatkitInstanceLocator,
-      userId: 'salma',
+      userId: 'Julie-J.',
       tokenProvider: new TokenProvider({ url: tokenUrl })
     });
 
@@ -94,8 +94,8 @@ class Main extends Component {
         this.getRooms();
         // handle user is a member of the default room case before making the request to fetch room messages
         for (const room of this.currentUser.rooms) {
-          if (room.id === this.state.roomId) {
-            this.fetchRoomMessages(this.state.roomId);
+          if (room.id === this.state.currentRoomId) {
+            this.fetchRoomMessages(this.state.currentRoomId);
           }
         }
 
@@ -114,6 +114,7 @@ class Main extends Component {
           joinedRooms={this.state.joinedRooms}
           joinableRooms={this.state.joinableRooms}
           subscribeToRoom={this.subscribeToRoom}
+          currentRoomId={this.state.currentRoomId}
         />
         <NewRoomForm />
         <SendMessageForm sendMessage={this.sendMessageToChatkit} />
