@@ -16,7 +16,7 @@ class RoomList extends Component {
 
     const joinedUserRooms = joinedRooms
       .sort((a, b) => {
-        return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1;
+        return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1; // toUpperCase() to ignore upper and lowercase
       })
       .map(room => {
         return (
@@ -33,7 +33,7 @@ class RoomList extends Component {
     console.log(joinedUserRooms);
     const joinableUserRooms = joinableRooms
       .sort((a, b) => {
-        return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1;
+        return a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1; // toUpperCase() to ignore upper and lowercase
       })
       .map(room => {
         return (
