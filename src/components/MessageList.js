@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Message from './Message';
-import { withChatkit } from '@pusher/chatkit-client-react';
 
 const MESSAGES_DUMMY_DATA = [
   {
@@ -18,12 +17,33 @@ const MESSAGES_DUMMY_DATA = [
 ];
 
 class MessageList extends Component {
+  // create ref for <MessageList /> to use for auto scroll
+  constructor(props) {
+    super(props);
+    this.messageListRef = React.createRef();
+  }
+
+  componentDidUpdate() {
+    // outoscroll to last message
+    const messageListNode = this.messageListRef.current;
+    messageListNode.scrollTop = messageListNode.scrollHeight;
+  }
+
   render() {
-    const { messages } = this.props;
+    const { messages, startMessage } = this.props;
+
     const roomMessages = messages.map((message, index) => {
       return <Message senderId={message.senderId} text={message} key={message.id} />;
     });
-    return <div className="message-list">{roomMessages}</div>;
+
+    return (
+      <Fragment>
+        <div className="message-list" ref={this.messageListRef}>
+          {roomMessages}
+          <div className="start-message">{startMessage}</div>
+        </div>
+      </Fragment>
+    );
   }
 }
 
