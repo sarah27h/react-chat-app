@@ -24,7 +24,8 @@ class MessageList extends Component {
   }
 
   // check where user in the scroll
-  componentWillUpdate() {
+  // use getSnapshotBeforeUpdate() instead of using componentWillUpdate
+  getSnapshotBeforeUpdate(prevProps, prevState) {
     const messageListNode = this.messageListRef.current;
     // scrollTop height of scrolled part from top
     // clientHeight height of appeared part
@@ -33,11 +34,13 @@ class MessageList extends Component {
     this.shouldScrollToBottom =
       messageListNode.scrollTop + messageListNode.clientHeight + 100 >=
       messageListNode.scrollHeight;
+    return this.shouldScrollToBottom;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     // outoscroll to last message
-    if (this.shouldScrollToBottom) {
+    // snapshot is the value returned from getSnapshotBeforeUpdate
+    if (snapshot) {
       const messageListNode = this.messageListRef.current;
       messageListNode.scrollTop = messageListNode.scrollHeight;
     }
