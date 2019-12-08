@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import Room from './Room';
 
-const ROOMS_DUMMY_DATA = [
-  {
-    roomName: 'JS-newbies'
-  },
-  {
-    roomName: 'random'
-  }
-];
-
 class RoomList extends Component {
   render() {
     const { joinedRooms, joinableRooms, subscribeToRoom, currentRoomId } = this.props;

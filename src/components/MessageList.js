@@ -1,20 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Message from './Message';
-
-const MESSAGES_DUMMY_DATA = [
-  {
-    senderId: 'perborgen',
-    text: 'Hey, how is it going?'
-  },
-  {
-    senderId: 'janedoe',
-    text: 'Great! How about you?'
-  },
-  {
-    senderId: 'perborgen',
-    text: 'Good to hear! I am great as well'
-  }
-];
 
 class MessageList extends Component {
   // create ref for <MessageList /> to use for auto scroll
@@ -55,12 +40,10 @@ class MessageList extends Component {
     });
 
     return (
-      <Fragment>
-        <div className={startListMessage} ref={this.messageListRef}>
-          {roomMessages}
-          {startMessage}
-        </div>
-      </Fragment>
+      <div className={startListMessage} ref={this.messageListRef}>
+        {roomMessages}
+        {startMessage}
+      </div>
     );
   }
 }
