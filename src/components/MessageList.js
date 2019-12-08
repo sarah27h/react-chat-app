@@ -23,14 +23,29 @@ class MessageList extends Component {
     this.messageListRef = React.createRef();
   }
 
+  // check where user in the scroll
+  componentWillUpdate() {
+    const messageListNode = this.messageListRef.current;
+    // scrollTop height of scrolled part from top
+    // clientHeight height of appeared part
+    // scrollHeight height of <MessageList />
+    // scroll to bottom when we are near it
+    this.shouldScrollToBottom =
+      messageListNode.scrollTop + messageListNode.clientHeight + 100 >=
+      messageListNode.scrollHeight;
+  }
+
   componentDidUpdate() {
     // outoscroll to last message
-    const messageListNode = this.messageListRef.current;
-    messageListNode.scrollTop = messageListNode.scrollHeight;
+    if (this.shouldScrollToBottom) {
+      const messageListNode = this.messageListRef.current;
+      messageListNode.scrollTop = messageListNode.scrollHeight;
+    }
   }
 
   render() {
     const { messages, startMessage } = this.props;
+    const startListMessage = startMessage === null ? 'message-list' : 'message-list start-message';
 
     const roomMessages = messages.map((message, index) => {
       return <Message senderId={message.senderId} text={message} key={message.id} />;
@@ -38,9 +53,9 @@ class MessageList extends Component {
 
     return (
       <Fragment>
-        <div className="message-list" ref={this.messageListRef}>
+        <div className={startListMessage} ref={this.messageListRef}>
           {roomMessages}
-          <div className="start-message">{startMessage}</div>
+          {startMessage}
         </div>
       </Fragment>
     );
