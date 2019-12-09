@@ -132,7 +132,10 @@ class Main extends Component {
           currentRoomId={this.state.currentRoomId}
         />
         <NewRoomForm creatRoom={this.creatRoom} />
-        <SendMessageForm sendMessage={this.sendMessageToChatkit} />
+        <SendMessageForm
+          sendMessage={this.sendMessageToChatkit}
+          currentRoomId={!this.state.currentRoomId}
+        />
       </div>
     );
   }

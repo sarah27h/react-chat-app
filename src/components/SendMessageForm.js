@@ -18,10 +18,12 @@ class SendMessageForm extends Component {
   };
 
   render() {
+    const { currentRoomId } = this.props;
     return (
       <div className="send-message-form">
         <form onSubmit={this.handleSubmit}>
           <input
+            disabled={currentRoomId} // if currentRoomId is null disable input
             type="text"
             value={this.state.message}
             onChange={this.handleChange}
