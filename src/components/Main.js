@@ -11,8 +11,7 @@ class Main extends Component {
     messages: [],
     joinableRooms: [],
     joinedRooms: [],
-    currentRoomId: null,
-    startMessage: 'Click a room to start chatting'
+    currentRoomId: null
   };
 
   sendMessageToChatkit = message => {
@@ -37,7 +36,7 @@ class Main extends Component {
         hooks: {
           onMessage: message => {
             console.log('received message', message, message.parts[0].payload.content);
-            this.setState({ startMessage: null, messages: [...this.state.messages, message] });
+            this.setState({ messages: [...this.state.messages, message] });
           }
         },
         messageLimit: 20
@@ -81,16 +80,17 @@ class Main extends Component {
       });
   };
 
-  fetchlastMessage = () => {
+  creatRoom = roomName => {
     this.currentUser
-      .fetchMultipartMessages({
-        roomId: this.state.currentRoomId
-        // initialId: messageId
+      .createRoom({
+        name: roomName
       })
-      .then(messages => {
-        const newMessage = messages[messages.length - 1];
-        this.setState({ messages: [...this.state.messages, newMessage] });
-        console.log(`Message is added, ${messages[messages.length - 1].parts[0].payload.content}`);
+      .then(room => {
+        this.subscribeToRoom(room.id);
+        console.log(`Created room called ${room.name}`);
+      })
+      .catch(err => {
+        console.log(`Error creating room ${err}`);
       });
   };
 
@@ -109,12 +109,6 @@ class Main extends Component {
       .then(currentUser => {
         this.currentUser = currentUser;
         this.getRooms();
-        // handle user is a member of the default room case before making the request to fetch room messages
-        // for (const room of this.currentUser.rooms) {
-        //   if (room.id === this.state.currentRoomId) {
-        //     this.fetchRoomMessages(this.state.currentRoomId);
-        //   }
-        // }
 
         console.log('Successful connection', currentUser.rooms);
       })
@@ -126,14 +120,18 @@ class Main extends Component {
     console.log(this.state);
     return (
       <div className="app">
-        <MessageList messages={this.state.messages} startMessage={this.state.startMessage} />
+        <MessageList
+          messages={this.state.messages}
+          startMessage={this.state.startMessage}
+          currentRoomId={this.state.currentRoomId}
+        />
         <RoomList
           joinedRooms={this.state.joinedRooms}
           joinableRooms={this.state.joinableRooms}
           subscribeToRoom={this.subscribeToRoom}
           currentRoomId={this.state.currentRoomId}
         />
-        <NewRoomForm />
+        <NewRoomForm creatRoom={this.creatRoom} />
         <SendMessageForm sendMessage={this.sendMessageToChatkit} />
       </div>
     );

@@ -32,17 +32,23 @@ class MessageList extends Component {
   }
 
   render() {
-    const { messages, startMessage } = this.props;
-    const startListMessage = startMessage === null ? 'message-list' : 'message-list start-message';
+    const { messages, startMessage, currentRoomId } = this.props;
 
     const roomMessages = messages.map((message, index) => {
       return <Message senderId={message.senderId} text={message} key={message.id} />;
     });
 
+    if (!currentRoomId) {
+      return (
+        <div className="message-list" ref={this.messageListRef}>
+          <div className="start-message">Click a room to start chatting</div>
+        </div>
+      );
+    }
+
     return (
-      <div className={startListMessage} ref={this.messageListRef}>
+      <div className="message-list" ref={this.messageListRef}>
         {roomMessages}
-        {startMessage}
       </div>
     );
   }
