@@ -18,15 +18,6 @@ class Main extends Component {
 
   sendMessageToChatkit = message => {
     this.currentUser
-      .isTypingIn({ roomId: this.state.currentRoomId })
-      .then(() => {
-        console.log('Success!');
-      })
-      .catch(err => {
-        console.log(`Error sending typing indicator: ${err}`);
-      });
-
-    this.currentUser
       .sendSimpleMessage({
         roomId: this.state.currentRoomId,
         text: message
@@ -35,7 +26,14 @@ class Main extends Component {
         console.log(`Error: ${err}`);
       });
 
-    // this.fetchlastMessage();
+    this.currentUser
+      .isTypingIn({ roomId: this.state.currentRoomId })
+      .then(() => {
+        console.log('Success!', this.currentUser.name);
+      })
+      .catch(err => {
+        console.log(`Error sending typing indicator: ${err}`);
+      });
   };
 
   subscribeToRoom = roomId => {
@@ -47,10 +45,17 @@ class Main extends Component {
         hooks: {
           onMessage: message => {
             this.setState({ messages: [...this.state.messages, message] });
+            console.log(message);
           },
           // fires whenever a member of that room goes on or off line
           onPresenceChanged: (state, user) => {
             console.log(`User ${user} ${user.id} is ${state.current}`);
+          },
+          onUserStartedTyping: user => {
+            console.log(`User ${user.name} started typing`);
+          },
+          onUserStoppedTyping: user => {
+            console.log(`User ${user.name} stopped typing`);
           }
         },
         messageLimit: 20
@@ -60,18 +65,7 @@ class Main extends Component {
           currentRoomId: room.id,
           roomUsers: room.users
         });
-        console.log(this.state.roomUsers);
 
-        // add avatar for roomUsers using https://ui-avatars.com/ API
-        // copy roomUsers state, add avatar, update roomUsers state by replacing it not modified it
-        // as state is immutable
-        // let roomUsers = [...this.state.roomUsers];
-        // roomUsers.forEach(user => {
-        // user.avatarURL = `https://ui-avatars.com/api/?name=${user.id}&size=30&rounded=true`;
-        // user.avatarURL = `sss`;
-        // });
-        // this.setState({ roomUsers });
-        // console.log(this.state.roomUsers, roomUsers);
         this.getRooms();
       })
       .catch(err => console.log('error on subscribing to room: ', err));
