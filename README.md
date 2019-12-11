@@ -4,6 +4,7 @@
 
 - [About the Project](#about-the-project)
 - [App Component](#app-component)
+- [Connect Chatkit](#connect-chatkit)
 - [Installing Instructions](#installing-instructions)
 - [ Offline First ](#offline-first)
 - [Credits](#credits)
@@ -17,7 +18,11 @@ This project is a chat application built using React.js and Chatkit API
 
 ## App Component
 
-![alt project component](https://github.com/sarah27h/react-chat-app/master/components.png)
+![alt project component](https://raw.githubusercontent.com/sarah27h/react-chat-app/master/components.png)
+
+## Connect Chatkit
+
+![alt project component](https://raw.githubusercontent.com/sarah27h/react-chat-app/master/chatkit.png)
 
 ## Installing Instructions
 
