@@ -15,6 +15,9 @@
 This project is a chat application built using React.js and Chatkit API
 
 - user-friendly interface
+- online indicator for users
+- ability for creating new rooms
+- responsive
 
 ## App Component
 
