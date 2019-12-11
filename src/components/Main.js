@@ -61,6 +61,17 @@ class Main extends Component {
           roomUsers: room.users
         });
         console.log(this.state.roomUsers);
+
+        // add avatar for roomUsers using https://ui-avatars.com/ API
+        // copy roomUsers state, add avatar, update roomUsers state by replacing it not modified it
+        // as state is immutable
+        // let roomUsers = [...this.state.roomUsers];
+        // roomUsers.forEach(user => {
+        // user.avatarURL = `https://ui-avatars.com/api/?name=${user.id}&size=30&rounded=true`;
+        // user.avatarURL = `sss`;
+        // });
+        // this.setState({ roomUsers });
+        // console.log(this.state.roomUsers, roomUsers);
         this.getRooms();
       })
       .catch(err => console.log('error on subscribing to room: ', err));
