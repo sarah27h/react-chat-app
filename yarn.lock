@@ -1130,7 +1130,7 @@
     prop-types "^15.7.2"
     react "^16.9.0"
 
-"@pusher/chatkit-client@^1.13.0":
+"@pusher/chatkit-client@^1.13.0", "@pusher/chatkit-client@^1.13.2":
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/@pusher/chatkit-client/-/chatkit-client-1.13.2.tgz#144dfc01c51386bf843e880927b286f73e15290f"
   integrity sha512-XJl63igmHnhLYcK82VK4+y+VIAuFlG/LBh2PjqUFv4tsOEAxzSLZ88scO/3vPD+bF2DxQCe/zJjzShbnSjGC9w==

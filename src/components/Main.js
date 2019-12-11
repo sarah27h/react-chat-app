@@ -3,32 +3,167 @@ import MessageList from './MessageList';
 import RoomList from './RoomList';
 import NewRoomForm from './NewRoomForm';
 import SendMessageForm from './SendMessageForm';
-import { ChatkitProvider, TokenProvider, withChatkit } from '@pusher/chatkit-client-react';
 import { tokenUrl, chatkitInstanceLocator } from '../config/config';
+import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
+import ContactList from './ContactList';
 
 class Main extends Component {
-  render() {
-    const instanceLocator = chatkitInstanceLocator;
+  state = {
+    messages: [],
+    joinableRooms: [],
+    joinedRooms: [],
+    currentRoomId: null,
+    roomUsers: []
+  };
 
-    const tokenProvider = new TokenProvider({
-      url: tokenUrl
+  sendMessageToChatkit = message => {
+    this.currentUser
+      .isTypingIn({ roomId: this.state.currentRoomId })
+      .then(() => {
+        console.log('Success!');
+      })
+      .catch(err => {
+        console.log(`Error sending typing indicator: ${err}`);
+      });
+
+    this.currentUser
+      .sendSimpleMessage({
+        roomId: this.state.currentRoomId,
+        text: message
+      })
+      .catch(err => {
+        console.log(`Error: ${err}`);
+      });
+
+    // this.fetchlastMessage();
+  };
+
+  subscribeToRoom = roomId => {
+    // console.log(roomId);
+    this.setState({ currentRoomId: roomId, messages: [] }); // UX clean screen every time user click an new room
+    this.currentUser
+      .subscribeToRoomMultipart({
+        roomId: roomId,
+        hooks: {
+          onMessage: message => {
+            this.setState({ messages: [...this.state.messages, message] });
+          },
+          // fires whenever a member of that room goes on or off line
+          onPresenceChanged: (state, user) => {
+            console.log(`User ${user} ${user.id} is ${state.current}`);
+          }
+        },
+        messageLimit: 20
+      })
+      .then(room => {
+        this.setState({
+          currentRoomId: room.id,
+          roomUsers: room.users
+        });
+        console.log(this.state.roomUsers);
+
+        // add avatar for roomUsers using https://ui-avatars.com/ API
+        // copy roomUsers state, add avatar, update roomUsers state by replacing it not modified it
+        // as state is immutable
+        // let roomUsers = [...this.state.roomUsers];
+        // roomUsers.forEach(user => {
+        // user.avatarURL = `https://ui-avatars.com/api/?name=${user.id}&size=30&rounded=true`;
+        // user.avatarURL = `sss`;
+        // });
+        // this.setState({ roomUsers });
+        // console.log(this.state.roomUsers, roomUsers);
+        this.getRooms();
+      })
+      .catch(err => console.log('error on subscribing to room: ', err));
+  };
+
+  getRooms = () => {
+    this.currentUser
+      .getJoinableRooms()
+      .then(rooms => {
+        this.setState({
+          joinableRooms: rooms,
+          joinedRooms: this.currentUser.rooms
+        });
+      })
+      .catch(err => {
+        console.log(`Error getting joinable rooms: ${err}`);
+      });
+  };
+
+  fetchRoomMessages = roomId => {
+    this.currentUser
+      .fetchMultipartMessages({
+        roomId,
+        // initialId: 42,
+        direction: 'older'
+        // limit: 10
+      })
+      .then(messages => {
+        this.setState({ messages });
+      })
+      .catch(err => {
+        console.log(`Error fetching messages: ${err}`);
+      });
+  };
+
+  creatRoom = roomName => {
+    this.currentUser
+      .createRoom({
+        name: roomName
+      })
+      .then(room => {
+        this.subscribeToRoom(room.id);
+        console.log(`Created room called ${room.name}`);
+      })
+      .catch(err => {
+        console.log(`Error creating room ${err}`);
+      });
+  };
+
+  // hook our app with chatkit API
+  componentDidMount() {
+    console.log('componentDidMount');
+    const chatManager = new ChatManager({
+      instanceLocator: chatkitInstanceLocator,
+      userId: 'salma',
+      tokenProvider: new TokenProvider({ url: tokenUrl })
     });
 
-    const userId = 'salma';
+    // connect with chatkit, fetch data from it
+    chatManager
+      .connect()
+      .then(currentUser => {
+        this.currentUser = currentUser;
+        this.getRooms();
 
+        console.log('Successful connection', currentUser.rooms);
+      })
+      .catch(err => {
+        console.log('Error on connection', err);
+      });
+  }
+  render() {
+    // console.log(this.state);
     return (
       <div className="app">
-        <ChatkitProvider
-          instanceLocator={instanceLocator}
-          tokenProvider={tokenProvider}
-          userId={userId}
-        >
-          {/* <WelcomeMessage /> */}
-          <MessageList />
-        </ChatkitProvider>
-        <RoomList />
-        <NewRoomForm />
-        <SendMessageForm />
+        <MessageList
+          messages={this.state.messages}
+          startMessage={this.state.startMessage}
+          currentRoomId={this.state.currentRoomId}
+        />
+        <RoomList
+          joinedRooms={this.state.joinedRooms}
+          joinableRooms={this.state.joinableRooms}
+          subscribeToRoom={this.subscribeToRoom}
+          currentRoomId={this.state.currentRoomId}
+        />
+        <ContactList roomUsers={this.state.roomUsers} />
+        <NewRoomForm creatRoom={this.creatRoom} />
+        <SendMessageForm
+          sendMessage={this.sendMessageToChatkit}
+          currentRoomId={!this.state.currentRoomId}
+        />
       </div>
     );
   }

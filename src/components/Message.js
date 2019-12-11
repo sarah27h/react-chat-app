@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Message extends Component {
-  render() {
-    const { senderId, text } = this.props;
-    return (
-      <div className="message">
-        <div className="message-username">{senderId}</div>
-        <div className="message-text">{text}</div>
-      </div>
-    );
-  }
-}
+const Message = ({ senderId, text }) => {
+  return (
+    <div className="message">
+      <div className="message-username">{senderId}</div>
+      <div className="message-text">{text.parts[0].payload.content}</div>
+    </div>
+  );
+};
 
 export default Message;
