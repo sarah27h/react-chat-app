@@ -17,7 +17,7 @@ This project is a chat application built using React.js and Chatkit API
 
 ## App Component
 
-![alt project wireframe](https://github.com/sarah27h/react-chat-app/master/react-chat-app.png)
+![alt project component](https://github.com/sarah27h/react-chat-app/master/components.png)
 
 ## Installing Instructions
 
