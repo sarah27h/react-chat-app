@@ -32,7 +32,7 @@ class MessageList extends Component {
   }
 
   render() {
-    const { messages, startMessage, currentRoomId } = this.props;
+    const { messages, currentRoomId } = this.props;
 
     const roomMessages = messages.map((message, index) => {
       return <Message senderId={message.senderId} text={message} key={message.id} />;

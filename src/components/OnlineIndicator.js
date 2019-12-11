@@ -1,12 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react';
 
-class OnlineIndicator extends Component {
+const OnlineIndicator = ({ presence }) => {
+  const userPresence = presence === 'online' ? 'online' : 'offline';
+  return <div className={`indicator ${userPresence}`} />;
+};
 
-    render() {
-        return(
-            
-        )
-    }
-}
-
-export default OnlineIndicator
+export default OnlineIndicator;

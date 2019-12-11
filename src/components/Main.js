@@ -5,16 +5,27 @@ import NewRoomForm from './NewRoomForm';
 import SendMessageForm from './SendMessageForm';
 import { tokenUrl, chatkitInstanceLocator } from '../config/config';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
+import ContactList from './ContactList';
 
 class Main extends Component {
   state = {
     messages: [],
     joinableRooms: [],
     joinedRooms: [],
-    currentRoomId: null
+    currentRoomId: null,
+    roomUsers: []
   };
 
   sendMessageToChatkit = message => {
+    this.currentUser
+      .isTypingIn({ roomId: this.state.currentRoomId })
+      .then(() => {
+        console.log('Success!');
+      })
+      .catch(err => {
+        console.log(`Error sending typing indicator: ${err}`);
+      });
+
     this.currentUser
       .sendSimpleMessage({
         roomId: this.state.currentRoomId,
@@ -28,23 +39,28 @@ class Main extends Component {
   };
 
   subscribeToRoom = roomId => {
-    console.log(roomId);
+    // console.log(roomId);
     this.setState({ currentRoomId: roomId, messages: [] }); // UX clean screen every time user click an new room
     this.currentUser
       .subscribeToRoomMultipart({
         roomId: roomId,
         hooks: {
           onMessage: message => {
-            console.log('received message', message, message.parts[0].payload.content);
             this.setState({ messages: [...this.state.messages, message] });
+          },
+          // fires whenever a member of that room goes on or off line
+          onPresenceChanged: (state, user) => {
+            console.log(`User ${user} ${user.id} is ${state.current}`);
           }
         },
         messageLimit: 20
       })
       .then(room => {
         this.setState({
-          currentRoomId: room.id
+          currentRoomId: room.id,
+          roomUsers: room.users
         });
+        console.log(this.state.roomUsers);
         this.getRooms();
       })
       .catch(err => console.log('error on subscribing to room: ', err));
@@ -117,7 +133,7 @@ class Main extends Component {
       });
   }
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <div className="app">
         <MessageList
@@ -131,6 +147,7 @@ class Main extends Component {
           subscribeToRoom={this.subscribeToRoom}
           currentRoomId={this.state.currentRoomId}
         />
+        <ContactList roomUsers={this.state.roomUsers} />
         <NewRoomForm creatRoom={this.creatRoom} />
         <SendMessageForm
           sendMessage={this.sendMessageToChatkit}

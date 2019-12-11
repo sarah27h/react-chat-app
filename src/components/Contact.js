@@ -1,12 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react';
+import OnlineIndicator from './OnlineIndicator';
 
-class Contact extends Component {
+const Contact = ({ presence, name, avatar }) => {
+  const you = presence === 'online' ? '(you)' : '';
+  return (
+    <li className="contact">
+      <OnlineIndicator presence={presence} />
+      <img className="avatar" src={`${avatar}`} alt="avatar" />
+      {`${name} ${you}`}
+    </li>
+  );
+};
 
-    render() {
-        return(
-            
-        )
-    }
-}
-
-export default Contact
+export default Contact;
