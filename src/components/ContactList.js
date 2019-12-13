@@ -3,20 +3,21 @@ import Contact from './Contact';
 
 class ContactList extends Component {
   render() {
-    const { roomUsers } = this.props;
+    const { roomUsers, currentUser } = this.props;
     const contactsList = roomUsers.map(contact => {
       return (
         <Contact
           name={contact.name}
           key={contact.id}
           presence={contact.presenceStore[`${contact.id}`]}
+          currentUser={currentUser}
         />
       );
     });
     return (
       <div className="contacts-list">
         <h3>Your Contacts</h3>
-        <ul>{contactsList}</ul>;
+        <ul>{contactsList}</ul>
       </div>
     );
   }

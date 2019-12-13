@@ -14,6 +14,7 @@ class Main extends Component {
     joinedRooms: [],
     currentRoomId: null,
     roomUsers: []
+    // currentUser: null
   };
 
   sendMessageToChatkit = message => {
@@ -152,7 +153,7 @@ class Main extends Component {
           subscribeToRoom={this.subscribeToRoom}
           currentRoomId={this.state.currentRoomId}
         />
-        <ContactList roomUsers={this.state.roomUsers} />
+        <ContactList roomUsers={this.state.roomUsers} currentUser={this.currentUser} />
         <NewRoomForm creatRoom={this.creatRoom} />
         <SendMessageForm
           sendMessage={this.sendMessageToChatkit}

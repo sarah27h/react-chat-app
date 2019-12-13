@@ -1,8 +1,9 @@
 import React from 'react';
 import OnlineIndicator from './OnlineIndicator';
 
-const Contact = ({ presence, name }) => {
-  const you = presence === 'online' ? '(you)' : '';
+const Contact = ({ presence, name, currentUser }) => {
+  const you = currentUser.presenceStore[currentUser.id] === presence ? '(you)' : '';
+  console.log(currentUser.id, currentUser.presenceStore[currentUser.id]);
   return (
     <li className="contact">
       <OnlineIndicator presence={presence} />
