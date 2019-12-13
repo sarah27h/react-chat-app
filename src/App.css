@@ -24,9 +24,9 @@ body {
   display: grid;
   height: 100%;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 60px;
+  grid-template-rows: 60px 1fr 1fr 1fr 1fr 60px;
   grid-template-areas:
-    'r c m m m m'
+    'r c h h h h'
     'r c m m m m'
     'r c m m m m'
     'r c m m m m'
@@ -48,6 +48,10 @@ body {
 
 .message-list {
   grid-area: m;
+}
+
+.room-header {
+  grid-area: h;
 }
 
 .send-message-form {
@@ -213,6 +217,12 @@ body {
   height: 100%;
   font-size: 34px;
   font-weight: 300;
+}
+
+.room-header {
+  background: #eee;
+  text-align: center;
+  font-size: 12px;
 }
 
 .start-message {

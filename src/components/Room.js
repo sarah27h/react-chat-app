@@ -9,7 +9,7 @@ const Room = ({ roomName, roomId, subscribeToRoom, currentRoomId }) => {
       /** pass roomId as an action to <Main /> 
       use <button> instead of <a>
       https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md*/}
-      <button onClick={() => subscribeToRoom(roomId)}># {roomName}</button>
+      <button onClick={() => subscribeToRoom(roomId, roomName)}># {roomName}</button>
     </li>
   );
 };

@@ -6,6 +6,7 @@ import SendMessageForm from './SendMessageForm';
 import { tokenUrl, chatkitInstanceLocator } from '../config/config';
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 import ContactList from './ContactList';
+import RoomHeader from './RoomHeader.js';
 
 class Main extends Component {
   state = {
@@ -13,8 +14,8 @@ class Main extends Component {
     joinableRooms: [],
     joinedRooms: [],
     currentRoomId: null,
-    roomUsers: []
-    // currentUser: null
+    roomUsers: [],
+    currentRoomName: null
   };
 
   sendMessageToChatkit = message => {
@@ -37,9 +38,9 @@ class Main extends Component {
       });
   };
 
-  subscribeToRoom = roomId => {
+  subscribeToRoom = (roomId, roomName) => {
     // console.log(roomId);
-    this.setState({ currentRoomId: roomId, messages: [] }); // UX clean screen every time user click an new room
+    this.setState({ currentRoomId: roomId, messages: [], currentRoomName: roomName }); // UX clean screen every time user click an new room
     this.currentUser
       .subscribeToRoomMultipart({
         roomId: roomId,
@@ -147,14 +148,20 @@ class Main extends Component {
           startMessage={this.state.startMessage}
           currentRoomId={this.state.currentRoomId}
         />
+
+        <RoomHeader currentRoomName={this.state.currentRoomName} />
+
         <RoomList
           joinedRooms={this.state.joinedRooms}
           joinableRooms={this.state.joinableRooms}
           subscribeToRoom={this.subscribeToRoom}
           currentRoomId={this.state.currentRoomId}
         />
+
         <ContactList roomUsers={this.state.roomUsers} currentUser={this.currentUser} />
+
         <NewRoomForm creatRoom={this.creatRoom} />
+
         <SendMessageForm
           sendMessage={this.sendMessageToChatkit}
           currentRoomId={!this.state.currentRoomId}
