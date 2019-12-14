@@ -18,9 +18,11 @@ class SendMessageForm extends Component {
   };
 
   render() {
-    const { currentRoomId } = this.props;
+    const { currentRoomId, messageFullArea } = this.props;
+    const fixed = messageFullArea ? 'fixed' : '';
+
     return (
-      <div className="send-message-form">
+      <div className={`send-message-form  ${fixed}`}>
         <form onSubmit={this.handleSubmit}>
           <input
             disabled={currentRoomId} // if currentRoomId is null disable input

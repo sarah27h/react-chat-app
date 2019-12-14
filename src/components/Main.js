@@ -15,7 +15,15 @@ class Main extends Component {
     joinedRooms: [],
     currentRoomId: null,
     roomUsers: [],
-    currentRoomName: null
+    currentRoomName: null,
+    messageFullArea: false
+  };
+
+  // <MessagesList /> take full width
+  handleHamburgerClick = () => {
+    this.setState(prevState => {
+      return { messageFullArea: !prevState.messageFullArea };
+    });
   };
 
   sendMessageToChatkit = message => {
@@ -146,12 +154,15 @@ class Main extends Component {
         <RoomHeader
           currentRoomName={this.state.currentRoomName}
           currentRoomId={this.state.currentRoomId}
+          handleHamburgerClick={this.handleHamburgerClick}
+          messageFullArea={this.state.messageFullArea}
         />
 
         <MessageList
           messages={this.state.messages}
           startMessage={this.state.startMessage}
           currentRoomId={this.state.currentRoomId}
+          messageFullArea={this.state.messageFullArea}
         />
 
         <RoomList
@@ -168,6 +179,7 @@ class Main extends Component {
         <SendMessageForm
           sendMessage={this.sendMessageToChatkit}
           currentRoomId={!this.state.currentRoomId}
+          messageFullArea={this.state.messageFullArea}
         />
       </div>
     );

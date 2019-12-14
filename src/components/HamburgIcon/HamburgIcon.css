@@ -1,0 +1,31 @@
+.header_menu {
+  /* display: inline-block;
+  position: absolute;
+  top: -6px; */
+  padding: 1em;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+.header_menu svg {
+  width: 32px;
+  fill: #5ea3d0;
+}
+
+.header_menu svg:hover {
+  width: 32px;
+  fill: #333;
+}
+
+.header_menu:focus {
+  fill: #333;
+}
+
+/* media queries */
+/* for small screens */
+@media screen and (min-width: 650px) {
+  .header_menu {
+    display: none;
+  }
+}

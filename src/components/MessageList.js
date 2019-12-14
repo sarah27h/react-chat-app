@@ -32,11 +32,13 @@ class MessageList extends Component {
   }
 
   render() {
-    const { messages, currentRoomId } = this.props;
+    const { messages, currentRoomId, messageFullArea } = this.props;
 
     const roomMessages = messages.map((message, index) => {
       return <Message senderId={message.senderId} text={message} key={message.id} />;
     });
+
+    const fullArea = messageFullArea ? 'full-area' : '';
 
     if (!currentRoomId) {
       return (
@@ -47,7 +49,7 @@ class MessageList extends Component {
     }
 
     return (
-      <div className="message-list" ref={this.messageListRef}>
+      <div className={`message-list  ${fullArea}`} ref={this.messageListRef}>
         {roomMessages}
       </div>
     );
