@@ -223,6 +223,7 @@ body {
   background: #eee;
   text-align: center;
   font-size: 12px;
+  width: 100%;
 }
 
 .start-message {

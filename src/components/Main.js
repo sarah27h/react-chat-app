@@ -143,13 +143,16 @@ class Main extends Component {
     // console.log(this.state);
     return (
       <div className="app">
+        <RoomHeader
+          currentRoomName={this.state.currentRoomName}
+          currentRoomId={this.state.currentRoomId}
+        />
+
         <MessageList
           messages={this.state.messages}
           startMessage={this.state.startMessage}
           currentRoomId={this.state.currentRoomId}
         />
-
-        <RoomHeader currentRoomName={this.state.currentRoomName} />
 
         <RoomList
           joinedRooms={this.state.joinedRooms}
