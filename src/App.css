@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Barlow:300,400,500&display=swap');
+
 :root {
   --main-color: #5ea3d0;
   --secondary-color: white;
   --main-text-color: #3e5869;
   --secondary-text-color: #b0c7d6;
   --send-message-form: #f5f5f5;
+  --indicator-color: #e30563;
 }
 
 html,
@@ -11,7 +14,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: system-ui;
+  font-family: 'Barlow', sans-serif;
   font-weight: 200;
   color: #3e5869;
 }
@@ -122,7 +125,7 @@ body {
 .indicator {
   width: 15px;
   height: 15px;
-  border: 2px solid #eee;
+  border: 2px solid var(--indicator-color);
   border-radius: 50%;
   display: inline-block;
   margin-right: 5px;
@@ -135,7 +138,7 @@ body {
 }
 
 .online {
-  background: var(--secondary-color);
+  background: var(--indicator-color);
 }
 
 .avatar {
