@@ -314,7 +314,7 @@ body {
 
   .full-area {
     position: absolute;
-    top: 64px;
+    top: 62px;
     margin-bottom: 40px; /* to get send message form not overlap the last message */
   }
 
