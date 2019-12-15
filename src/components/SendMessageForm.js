@@ -29,6 +29,7 @@ class SendMessageForm extends Component {
             type="text"
             value={this.state.message}
             onChange={this.handleChange}
+            aria-label="Type message and hit enter"
             placeholder="Type message and hit enter"
           />
         </form>

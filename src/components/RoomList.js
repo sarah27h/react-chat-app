@@ -39,10 +39,10 @@ class RoomList extends Component {
 
     return (
       <div className="rooms-list">
-        <h3>Your Rooms</h3>
+        <h2>Your Rooms</h2>
         {joinedUserRooms.length === 0 ? <p>Click to join rooms</p> : <ul>{joinedUserRooms}</ul>}
 
-        <h3>Rooms to join</h3>
+        <h2>Rooms to join</h2>
         {joinableUserRooms.length === 0 ? <p>No new rooms yet</p> : <ul>{joinableUserRooms}</ul>}
       </div>
     );

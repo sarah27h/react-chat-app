@@ -16,7 +16,7 @@ class ContactList extends Component {
     });
     return (
       <div className="contacts-list">
-        <h3>Your Contacts</h3>
+        <h2>Your Contacts</h2>
         <ul>{contactsList}</ul>
       </div>
     );

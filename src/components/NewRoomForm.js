@@ -22,10 +22,11 @@ class NewRoomForm extends Component {
           <input
             value={this.state.roomName}
             type="text"
+            aria-label="enter a room name"
             placeholder="Create a room"
             onChange={this.handleChange}
           />
-          <button>+</button>
+          <button aria-label="add new room">+</button>
         </form>
       </div>
     );

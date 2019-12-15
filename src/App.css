@@ -81,8 +81,9 @@ body {
   margin: 10px 0;
 }
 
-.rooms-list > h3 {
+.rooms-list > h2 {
   margin: 5px 0;
+  font-size: 19px;
   color: var(--secondary-color);
 }
 
@@ -111,14 +112,16 @@ body {
   list-style-type: none;
   padding: 0;
   overflow: scoll;
+  color: #00394e;
 }
 
 .contacts-list li {
   margin: 10px 0;
 }
 
-.contacts-list > h3 {
+.contacts-list > h2 {
   margin: 5px 0;
+  font-size: 19px;
   color: var(--secondary-color);
 }
 
