@@ -12,6 +12,8 @@
 
 ## About the Project
 
+![alt project banner](https://raw.githubusercontent.com/sarah27h/react-chat-app/master/project-banner.png)
+
 This project is a chat application built using React.js and Chatkit API
 
 - user-friendly interface
